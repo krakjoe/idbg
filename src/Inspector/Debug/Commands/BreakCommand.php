@@ -10,7 +10,7 @@ namespace Inspector\Debug\Commands {
 		const BreakOpline   = 0x00001000;
 
 		public function match(string $line, array &$argv = []) : bool {
-			if (preg_match("~^(b|break)\s((([a-zA-Z0-9\_]+)::)?([a-zA-Z0-9\_]+))?\s?(([:|#])([0-9]+))?$~", $line, $argv)) {
+			if (preg_match("~^(b|break)\s((([a-zA-Z0-9\_\\\]+)::)?([a-zA-Z0-9\_]+))?\s?(([:|#])([0-9]+))?$~", $line, $argv)) {
 
 				$configure = [
 					"breakPointType" => 0,

@@ -2,8 +2,15 @@
 <?php
 use Inspector\Debug\Debugger;
 
-$autoloader = require_once(sprintf(
-	"%s/../vendor/autoload.php", dirname(__FILE__)));
+$path = dirname(__FILE__);
+
+if (file_exists("{$path}/../../../autoload.php")) { # not right
+	$autoloader = 
+		require_once("{$path}/../../../autoload.php");
+} else {
+	$autoloader = 
+		require_once("{$path}/../vendor/autoload.php");
+}
 
 $debugger = new Debugger("idbg");
 
