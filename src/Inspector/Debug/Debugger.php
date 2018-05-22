@@ -89,9 +89,9 @@ namespace Inspector\Debug {
 				}
 			} catch (\Throwable $ex) {
 				$this->exception($ex);
-			} finally {
-				$this->interact($bp, $frame);
 			}
+
+			$this->interact($bp, $frame);
 		}
 
 		public function exception($ex) {

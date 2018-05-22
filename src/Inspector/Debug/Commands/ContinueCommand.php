@@ -11,7 +11,7 @@ namespace Inspector\Debug\Commands {
 					 \Inspector\Debug\BreakPoint $bp = null, 
 					 \Inspector\InspectorFrame &$frame = null, 
 					 array $argv = []) : int {
-			return self::CommandReturn;
+			return ContinueCommand::CommandReturn;
 		}
 	}
 }

@@ -66,7 +66,7 @@ namespace Inspector\Debug\Commands {
 						$inspector->getStartLine(), 
 						$inspector->getEndLine());
 				}
-			} catch (ReflectionException $ex) {
+			} catch (\ReflectionException $ex) {
 				switch ($config["type"]) {
 					case "function":
 						printf("the function %s could not be found\n", $config["function"]);
