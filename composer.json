@@ -1,0 +1,13 @@
+{
+    "name": "krakjoe/idbg",
+    "require": {
+        "php": "7.*",
+        "ext-inspector": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Inspector\\": "src/Inspector/"
+        }
+    },
+    "bin": ["bin/idbg"]
+}

@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+use Inspector\Debug\Debugger;
+
+$autoloader = require_once(sprintf(
+	"%s/../vendor/autoload.php", dirname(__FILE__)));
+
+$debugger = new Debugger("idbg");
+
+foreach ([
+	new Inspector\Debug\Commands\ContinueCommand,
+	new Inspector\Debug\Commands\PrintCommand,
+	new Inspector\Debug\Commands\ListCommand,
+	new Inspector\Debug\Commands\StackCommand,
+	new Inspector\Debug\Commands\BreakCommand,
+	new Inspector\Debug\Commands\EnableCommand,
+	new Inspector\Debug\Commands\DisableCommand,
+	new Inspector\Debug\Commands\DeleteCommand,
+	new Inspector\Debug\Commands\FrameCommand,
+	new Inspector\Debug\Commands\TraceCommand,
+	new Inspector\Debug\Commands\NextCommand,
+	new Inspector\Debug\Commands\RunCommand,
+	new Inspector\Debug\Commands\QuitCommand,
+] as $command) {
+	$debugger->addCommand($command);
+}
+
+do {
+	$debugger->interact();
+} while(1);
+?>
