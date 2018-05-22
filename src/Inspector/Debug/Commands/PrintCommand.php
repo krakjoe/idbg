@@ -20,7 +20,7 @@ namespace Inspector\Debug\Commands {
 		public function __invoke(\Inspector\Debug\Debugger $debugger, 
 					 \Inspector\Debug\BreakPoint $bp = null, 
 					 \Inspector\InspectorFrame &$frame = null, 
-					 array $argv = []) : int {
+					 array $configure = []) : int {
 			if (is_numeric($configure["symbol"])) {
 				debug_zval_dump(
 					$frame->getVariable($configure["symbol"]));
