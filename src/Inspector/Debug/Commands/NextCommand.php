@@ -89,15 +89,15 @@ namespace Inspector\Debug\Commands {
 					0 : $debugger->createBreakPoint($next, true);
 
 				if ($idx > 0) {
-					return self::DebuggerCommandReturn;
+					return NextCommand::CommandReturn;
 				} else {
 					$bp->enable();
-					return self::DebuggerCommandReturn;
+					return NextCommand::CommandReturn;
 				}
 			}
 
 			printf("end of opline\n");
-			return self::DebuggerCommandInteract;
+			return NextCommand::CommandInteract;
 		}
 	}
 }
