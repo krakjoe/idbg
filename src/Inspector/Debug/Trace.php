@@ -19,10 +19,15 @@ namespace Inspector\Debug {
 				$this->trace[] = [
 					"scope" => $scope->getName(),
 					"class" => $class ? $class->getName() : null,
+					"file" => $scope->getFileName(),
 					"line" => $opline->getLine(),
 					"params" => $this->parameterize(
 							$frame->getParameters())
 				];
+
+				if (!$scope->getName()) {
+					break;
+				}
 			} while ($frame = $frame->getPrevious());
 		}
 
@@ -39,8 +44,16 @@ namespace Inspector\Debug {
 						$parameterized[] = sprintf("array(%d)", count($parameter));
 					break;
 
+					case "integer":
+						$parameterized[] = sprintf("%d", $parameter);
+					break;
+
+					case "float":
+						$parameterized[] = sprintf("%f", $parameter);
+					break;
+
 					default:
-						$parameterized[] = sprintf("%s(%s)", gettype($parameter), $parameter);
+						$parameterized[] = "string";
 				}
 			}
 
@@ -59,7 +72,9 @@ namespace Inspector\Debug {
 
 				$line[] = sprintf("#%d ", $idx);
 				if ($frame["scope"]) {
-					$line[] = sprintf("%s", $frame["scope"]);
+					if ($frame["class"]) {
+						$line[] = sprintf("%s::%s", $frame["class"], $frame["scope"]);
+					} else $line[] = sprintf("%s", $frame["scope"]);
 				} else $line[] = sprintf("main");
 				$line[] = sprintf("%s", $frame["params"]);
 				$line[] = sprintf(" in %s on line %d", $frame["file"], $frame["line"]);
