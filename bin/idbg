@@ -20,6 +20,7 @@ foreach ([
 	new Inspector\Debug\Commands\ListCommand,
 	new Inspector\Debug\Commands\StackCommand,
 	new Inspector\Debug\Commands\BreakCommand,
+	new Inspector\Debug\Commands\BreaksCommand,
 	new Inspector\Debug\Commands\EnableCommand,
 	new Inspector\Debug\Commands\DisableCommand,
 	new Inspector\Debug\Commands\DeleteCommand,
