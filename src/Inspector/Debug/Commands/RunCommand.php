@@ -17,27 +17,11 @@ namespace Inspector\Debug\Commands {
 					 \Inspector\Debug\BreakPoint $bp = null, 
 					 \Inspector\InspectorFrame &$frame = null, 
 					 array $config = []) : int {
-			$stack = [];
-
-			if ($frame) {
-				$stack = 
-					$frame->getStack();
-				extract($stack);
-			}
-
 			try {
 				$result = include($config["file"]);
 	 		} catch (\Throwable $ex) {
 				$debugger->exception($ex);
 			} finally {
-				if ($stack) {
-					foreach ($stack as $k => $v) {
-						unset($v);
-					}
-
-					unset($stack);
-				}
-
 				if ($result) {
 					debug_zval_dump($result);
 				}

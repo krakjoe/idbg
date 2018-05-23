@@ -38,9 +38,7 @@ namespace Inspector\Debug\Commands {
 					unset($stack);
 				}
 
-				if ($result) {
-					debug_zval_dump($result);
-				}
+				debug_zval_dump($result);
 			}
 
 			return RunCommand::CommandInteract;
