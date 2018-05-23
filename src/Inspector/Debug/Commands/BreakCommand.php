@@ -13,8 +13,8 @@ namespace Inspector\Debug\Commands {
 			if (preg_match("~^(b|break)\s((([a-zA-Z0-9\_\\\]+)::)?([a-zA-Z0-9\_]+))?\s?(([:|#])([0-9]+))?$~", $line, $argv)) {
 
 				$configure = [
+					"input" => $line,
 					"breakPointType" => 0,
-					"input" => $argv[2],
 					"class" => $argv[4],
 					"function" => $argv[5],
 					"offsetType" => $argv[7],
@@ -76,7 +76,7 @@ namespace Inspector\Debug\Commands {
 				return BreakCommand::CommandInteract;
 			}
 
-			$idx = $debugger->createBreakPoint($opline);
+			$idx = $debugger->createBreakPoint($opline, false, $config["input"]);
 
 			if ($idx > 0) {
 				printf("created breakpoint #%d\n", $idx);

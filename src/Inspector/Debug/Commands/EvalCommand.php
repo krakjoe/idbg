@@ -1,12 +1,12 @@
 <?php
 namespace Inspector\Debug\Commands {
 
-	class RunCommand extends \Inspector\Debug\Command {
+	class EvalCommand extends \Inspector\Debug\Command {
 
 		public function match(string $line, array &$argv = []) : bool {
-			if (preg_match("~^(r|run)\s(.*)$~", $line, $argv)) {
+			if (preg_match("~^(e|ev|eval)\s(.*)$~", $line, $argv)) {
 				$argv = [
-					"file" => $argv[2]
+					"code" => $argv[2]
 				];
 				return true;
 			}
@@ -26,7 +26,7 @@ namespace Inspector\Debug\Commands {
 			}
 
 			try {
-				$result = include($config["file"]);
+				$result = eval("return {$config["code"]};");
 	 		} catch (\Throwable $ex) {
 				$debugger->exception($ex);
 			} finally {

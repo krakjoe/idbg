@@ -27,6 +27,7 @@ foreach ([
 	new Inspector\Debug\Commands\TraceCommand,
 	new Inspector\Debug\Commands\NextCommand,
 	new Inspector\Debug\Commands\RunCommand,
+	new Inspector\Debug\Commands\EvalCommand,
 	new Inspector\Debug\Commands\QuitCommand,
 ] as $command) {
 	$debugger->addCommand($command);

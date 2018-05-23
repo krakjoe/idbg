@@ -28,9 +28,9 @@ namespace Inspector\Debug {
 			return $line;
 		}
 
-		public function createBreakPoint(InspectorInstruction $opline, bool $temporary = false) : int {
+		public function createBreakPoint(InspectorInstruction $opline, bool $temporary = false, string $export = null) : int {
 			$break = new BreakPoint(
-				$this, $opline, count($this->breaks)+1, $temporary);
+				$this, $opline, count($this->breaks)+1, $temporary, $export);
 
 			if ($break->isEnabled()) {
 				$this->breaks[] = $break;
