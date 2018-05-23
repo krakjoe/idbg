@@ -2,8 +2,7 @@
     "name": "krakjoe/idbg",
     "require": {
         "php": "7.*",
-        "ext-inspector": "*",
-        "krakjoe/idbg": "dev-master"
+        "ext-inspector": "*"
     },
     "autoload": {
         "psr-4": {

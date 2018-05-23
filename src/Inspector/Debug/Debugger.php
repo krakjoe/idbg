@@ -68,6 +68,10 @@ namespace Inspector\Debug {
 			return $this->breaks[$id - 1]->disable();
 		}
 
+		public function getBreakPoints() {
+			return $this->breaks;
+		}
+
 		public function interact(BreakPoint $bp = null, Frame &$frame = null) {
 			try {
 				$line = $this->prompt();
