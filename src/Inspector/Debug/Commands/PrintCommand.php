@@ -1,42 +1,44 @@
 <?php
 namespace Inspector\Debug\Commands {
-	
-	class PrintCommand extends \Inspector\Debug\Command {
 
-		public function match(string $line, array &$argv = []) : bool {
-			if (preg_match("~^(p|print)\s+(.*)$~si", $line, $argv)) {
-				$argv = [
-					"symbol" => $argv[2]
-				];
-				return true;
-			}
-			return false;
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;	
+
+	class PrintCommand extends Command {
+
+		public function requiresParameters() : ?array {
+			return [
+				Parameter::Symbol | Parameter::Numeric
+			];
 		}
 
 		public function requiresFrame() : bool {
 			return true;
 		}
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $configure = []) : int {
-			if (is_numeric($configure["symbol"])) {
+		public function __invoke(BreakPoint $bp = null, 
+					 Frame &$frame = null, 
+					 Parameter ... $parameters) : int {
+			[$parameter] = $parameters;
+
+			if ($parameter->getType() == Parameter::Numeric) {
 				debug_zval_dump(
-					$frame->getVariable($configure["symbol"]));
+					$frame->getVariable($parameter->getSymbol()));
 
 				return self::CommandInteract;
 			}
 
 			$stack = $frame->getStack();
 
-			if (!$stack || !isset($stack[$configure["symbol"]])) {
+			if (!$stack || !isset($stack[$parameter->getValue()])) {
 				printf("%s does not exist in current scope\n", 
-					$configure["symbol"]);
+					$parameter->getValue());
 				return self::CommandInteract;
 			}
 
-			debug_zval_dump($stack[$configure["symbol"]]);
+			debug_zval_dump($stack[$parameter->getValue()]);
 			return self::CommandInteract;
 		}
 	}

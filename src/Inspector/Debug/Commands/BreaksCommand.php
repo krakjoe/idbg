@@ -1,18 +1,17 @@
 <?php
 namespace Inspector\Debug\Commands {
 
-	class BreaksCommand extends \Inspector\Debug\Command {
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;
 
-		public function match(string $line, array &$argv = []) : bool {
-			return preg_match("~^(breaks)$~", $line);
-		}
+	class BreaksCommand extends Command {
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $config = []) : int {
+		public function getAbbreviations() : array { return []; }
 
-			foreach ($debugger->getBreakPoints() as $break) {
+		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
+			foreach ($this->debugger->getBreakPoints() as $break) {
 				if ($break->isEnabled()) {
 					$opline   = $break->getInstruction();
 					$function = $opline->getFunction();

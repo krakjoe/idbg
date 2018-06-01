@@ -1,20 +1,18 @@
 <?php
 namespace Inspector\Debug\Commands {
 
-	class StackCommand extends \Inspector\Debug\Command {
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;
 
-		public function match(string $line, array &$argv = []) : bool {
-			return preg_match("~^(s|stack)$~", $line);
-		}
+	class StackCommand extends Command {
 
 		public function requiresFrame() : bool {
 			return true;
 		}
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $argv = []) : int {
+		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
 			$stack = $frame->getStack();
 			foreach ($stack as $name => $value) {	
 				$type = gettype($value);

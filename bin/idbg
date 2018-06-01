@@ -15,21 +15,21 @@ if (file_exists("{$path}/../../../autoload.php")) { # not right
 $debugger = new Debugger("idbg");
 
 foreach ([
-	new Inspector\Debug\Commands\ContinueCommand,
-	new Inspector\Debug\Commands\PrintCommand,
-	new Inspector\Debug\Commands\ListCommand,
-	new Inspector\Debug\Commands\StackCommand,
-	new Inspector\Debug\Commands\BreakCommand,
-	new Inspector\Debug\Commands\BreaksCommand,
-	new Inspector\Debug\Commands\EnableCommand,
-	new Inspector\Debug\Commands\DisableCommand,
-	new Inspector\Debug\Commands\DeleteCommand,
-	new Inspector\Debug\Commands\FrameCommand,
-	new Inspector\Debug\Commands\TraceCommand,
-	new Inspector\Debug\Commands\NextCommand,
-	new Inspector\Debug\Commands\RunCommand,
-	new Inspector\Debug\Commands\EvalCommand,
-	new Inspector\Debug\Commands\QuitCommand,
+	new Inspector\Debug\Commands\ContinueCommand($debugger),
+	new Inspector\Debug\Commands\PrintCommand($debugger),
+	new Inspector\Debug\Commands\ListCommand($debugger),
+	new Inspector\Debug\Commands\StackCommand($debugger),
+	new Inspector\Debug\Commands\BreakCommand($debugger),
+	new Inspector\Debug\Commands\BreaksCommand($debugger),
+	new Inspector\Debug\Commands\EnableCommand($debugger),
+	new Inspector\Debug\Commands\DisableCommand($debugger),
+	new Inspector\Debug\Commands\DeleteCommand($debugger),
+	new Inspector\Debug\Commands\FrameCommand($debugger),
+	new Inspector\Debug\Commands\TraceCommand($debugger),
+	new Inspector\Debug\Commands\NextCommand($debugger),
+	new Inspector\Debug\Commands\RunCommand($debugger),
+	new Inspector\Debug\Commands\EvalCommand($debugger),
+	new Inspector\Debug\Commands\QuitCommand($debugger),
 ] as $command) {
 	$debugger->addCommand($command);
 }

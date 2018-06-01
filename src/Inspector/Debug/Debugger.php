@@ -1,7 +1,6 @@
 <?php
 namespace Inspector\Debug {
-	use \Inspector\Debug\Command;
-	use \Inspector\Debug\BreakPoint;
+
 	use \Inspector\InspectorFrame as Frame;
 	use \Inspector\InspectorInstruction;
 
@@ -80,15 +79,16 @@ namespace Inspector\Debug {
 					return;
 				}
 
-				$argv = [];
-				$command = $this->findCommand($line, $argv);
+				$parameters = [];
 
-				if ($command->requiresFrame() && !$frame) {
-					printf("%s requires a frame\n", 
-						$command->getName());
-				} else {
-					if ($command($this, $bp, $frame, $argv) == Command::CommandReturn) {
-						return;
+				if ($command = $this->findCommand($line, $parameters)) {
+					if ($command->requiresFrame() && !$frame) {
+						printf("%s requires a frame\n", 
+							$command->getName());
+					} else {
+						if ($command($bp, $frame, ... $parameters) == Command::CommandReturn) {
+							return;
+						}
 					}
 				}
 			} catch (\Throwable $ex) {
@@ -106,7 +106,8 @@ namespace Inspector\Debug {
 			$function = $frame->getFunction();
 			$opline = $frame->getInstruction();
 
-			printf("hit %s at %s#%d (%s) in %s on line %d\n", 
+			printf("[%08x] hit %s at %s#%d (%s) in %s on line %d\n", 
+				$opline->getAddress(),
 				$bp->isTemporary() ? 
 					"next" : 
 					sprintf("breakpoint #%d", $bp->getId()),
@@ -114,7 +115,7 @@ namespace Inspector\Debug {
 					$name : "main()",
 				$opline->getOffset(),
 				$opline->getOpcodeName(),
-				$function->getFileName(),			
+				$function->getFileName(),		
 				$opline->getLine());
 
 			$this->listOpline($opline);
@@ -122,7 +123,7 @@ namespace Inspector\Debug {
 		}
 
 		public function addCommand(Command $command) {
-			$this->commands[get_class($command)] = $command;
+			$this->commands[$command->getName()] = $command;
 		}
 
 		public function listSource(string $file, int $start = 0, int $end = -1, int $highlight = -1) {
@@ -165,26 +166,38 @@ namespace Inspector\Debug {
 			$this->listSource($function->getFileName(), $start, $end, $highlight);
 		}
 
-		private function findCommand(string $line, array &$argv) : Command {
+		private function findCommand(string $line, array &$parameters) : ?Command {
+			$end        = strpos($line, " ");
+			$name       = trim(substr($line, 0, $end ? $end : strlen($line)));
+			$selected   = null;
+
 			foreach ($this->commands as $command) {
-				if ($command->match($line, $argv)) {
-					return $command;
+				if (strncasecmp($name, $command->getName(), strlen($name)) == 0) {
+					$selected = $command;
+					break;
+				}
+
+				foreach ($command->getAbbreviations() as $abbreviation) {
+					if (strncasecmp($name, $abbreviation, strlen($name)) == 0) {
+						$selected = $command;
+						break;
+					}
 				}
 			}
 
-			return new class extends Command {
-				public function match(string $line, array &$argv) : bool 
-				{
-					return true;
-				}
+			if (!$selected) {
+				return new \Inspector\Debug\Commands\UnknownCommand($this);
+			}
 
-				public function __invoke(Debugger $debugger, BreakPoint $bp = null, Frame &$frame = null, array $argv = []) : int
-				{
-					printf("invalid command\n");
-
-					return self::CommandInteract;
+			if ($requiredParameters = $selected->requiresParameters()) {
+				if (!$parameters = Parameter::parse(
+						$requiredParameters, 
+						trim(substr($line, strlen($name))))) {
+					return null;
 				}
-			};
+			}
+
+			return $selected;
 		}
 
 		private $prompt;

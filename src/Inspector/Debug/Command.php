@@ -1,19 +1,38 @@
 <?php
 namespace Inspector\Debug {
 
+	use \Inspector\InspectorFrame as Frame;
+
 	abstract class Command {
-		abstract public function match(string $line, array &$argv) : bool;
+		public function __construct(Debugger $debugger) {
+			$this->debugger = $debugger;
+		}
 
-		abstract public function __invoke(\Inspector\Debug\Debugger $debugger, 
-						  \Inspector\Debug\BreakPoint $bp = null, 
-						  \Inspector\InspectorFrame &$frame = null, 
-						  array $argv = []) : int;
+		abstract public function __invoke(BreakPoint $bp = null, 
+						  Frame &$frame = null, 
+						  Parameter ... $parameter) : int;
+		
+		public function getName() : string {
+			$components = preg_split(
+				"~\\\\~", get_class($this));
 
-		public function getName() : string { return get_class($this); }
+			return strtolower(
+				str_ireplace(
+					"command", "", end($components))); 
+		}
 
+		public function getAbbreviations() : array {
+			return [
+				strtolower(substr($this->getName(), 0, 2))
+			];
+		}
+
+		public function requiresParameters() : ?array { return null; }
 		public function requiresFrame() : bool { return false; }
 
 		const CommandInteract = 0;
 		const CommandReturn   = 1;
+
+		protected $debugger;
 	}
 }

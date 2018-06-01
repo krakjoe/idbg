@@ -1,16 +1,14 @@
 <?php
 namespace Inspector\Debug\Commands {
-	
-	class ContinueCommand extends \Inspector\Debug\Command {
 
-		public function match(string $line, array &$argv = []) : bool {
-			return preg_match("~^(c|continue)$~", $line);
-		}
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $argv = []) : int {
+	class ContinueCommand extends Command {
+
+		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
 			return ContinueCommand::CommandReturn;
 		}
 	}

@@ -1,23 +1,23 @@
 <?php
 namespace Inspector\Debug\Commands {
 
-	class EvalCommand extends \Inspector\Debug\Command {
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;
 
-		public function match(string $line, array &$argv = []) : bool {
-			if (preg_match("~^(e|ev|eval)\s(.*)$~", $line, $argv)) {
-				$argv = [
-					"code" => $argv[2]
-				];
-				return true;
-			}
-			return false;
+	class EvalCommand extends Command {
+
+		public function requiresParameters() : ?array {
+			return [
+				Parameter::Raw
+			];
 		}
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $config = []) : int {
+		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
 			$stack = [];
+
+			[$parameter] = $parameters;
 
 			if ($frame) {
 				$stack = 
@@ -26,9 +26,12 @@ namespace Inspector\Debug\Commands {
 			}
 
 			try {
-				$result = eval("return {$config["code"]};");
+				$result = eval(sprintf(
+					"return %s;",
+					$parameter->getInput()
+				));
 	 		} catch (\Throwable $ex) {
-				$debugger->exception($ex);
+				$this->debugger->exception($ex);
 			} finally {
 				if ($stack) {
 					foreach ($stack as $k => $v) {

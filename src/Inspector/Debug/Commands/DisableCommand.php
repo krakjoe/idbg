@@ -1,25 +1,28 @@
 <?php
 namespace Inspector\Debug\Commands {
 
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;
+
 	class DisableCommand extends \Inspector\Debug\Command {
 
-		public function match(string $line, array &$argv = []) : bool {
-			if (preg_match("~^(disable)\s([0-9]+)$~", $line, $argv)) {
-				$argv = [
-					"id" => $argv[2]
-				];
-				return true;
-			}
-			return false;
+		public function requiresParameters() : ?array {
+			return [
+				Parameter::Numeric
+			];
 		}
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $config = []) : int {
-			if ($debugger->disableBreakPoint($config["id"])) {
-				printf("disabled breakpoint #%d\n", $config["id"]);
+		public function __invoke(BreakPoint $bp = null, 
+					 Frame &$frame = null, 
+					 Parameter ... $parameters) : int {
+			[$parameter] = $parameters;
+
+			if ($this->debugger->disableBreakPoint($parameter->getValue())) {
+				printf("disabled breakpoint #%d\n", $parameter->getValue());
 			}
+
 			return DisableCommand::CommandInteract;
 		}
 	}

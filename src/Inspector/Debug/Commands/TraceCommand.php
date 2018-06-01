@@ -1,20 +1,18 @@
 <?php
 namespace Inspector\Debug\Commands {
 
-	class TraceCommand extends \Inspector\Debug\Command {
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;
 
-		public function match(string $line, array &$argv = []) : bool {
-			return preg_match("~^(bt|back|backtrace)$~", $line);
-		}
+	class TraceCommand extends Command {
 
 		public function requiresFrame() : bool {
 			return true;
 		}
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $config = []) : int {
+		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
 			printf("%s\n", (string) new \Inspector\Debug\Trace($frame));
 
 			return TraceCommand::CommandInteract;

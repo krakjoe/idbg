@@ -1,26 +1,28 @@
 <?php
 namespace Inspector\Debug\Commands {
 
-	class FrameCommand extends \Inspector\Debug\Command {
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;	
 
-		public function match(string $line, array &$argv = []) : bool {
-			if (preg_match("~^(f|frame)\s([0-9]+)$~", $line, $argv)) {
-				$argv = [
-					"depth" => $argv[2]
-				];
-				return true;
-			}
-			return false;
+	class FrameCommand extends Command {
+
+		public function requiresParameters() : ?array {
+			return [
+				Parameter::Numeric
+			];
 		}
 
 		public function requiresFrame() : bool {
 			return true;
 		}
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $config = []) : int {
+		public function __invoke(BreakPoint $bp = null, 
+					 Frame &$frame = null, 
+					 Parameter ... $parameters) : int {
+			[$parameter] = $parameters;
+
 			if (!count($this->frames)) {
 				$next = $frame;
 				do {
@@ -28,14 +30,14 @@ namespace Inspector\Debug\Commands {
 				} while ($next && $next = $next->getPrevious());
 			}
 
-			if ($config["depth"] < 0 || $config["depth"] > count($this->frames)) {
+			if ($parameter->getValue() < 0 || $parameter->getValue() > count($this->frames)) {
 				printf("frame out of bounds\n");
 				return FrameCommand::CommandInteract;
 			}
 
-			$frame = $this->frames[$config["depth"]];
+			$frame = $this->frames[$parameter->getValue()];
 
-			if ($config["depth"] == 0) {
+			if ($parameter->getValue() == 0) {
 				$this->frames = [];
 			}
 

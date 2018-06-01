@@ -1,26 +1,31 @@
 <?php
 namespace Inspector\Debug\Commands {
 
-	class RunCommand extends \Inspector\Debug\Command {
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;
 
-		public function match(string $line, array &$argv = []) : bool {
-			if (preg_match("~^(r|run)\s(.*)$~", $line, $argv)) {
-				$argv = [
-					"file" => $argv[2]
-				];
-				return true;
-			}
-			return false;
+	class RunCommand extends Command {
+
+		public function requiresParameters() : ?array {
+			return [
+				Parameter::File,
+			];
 		}
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $config = []) : int {
+		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
+			\Inspector\InspectorFile::purge([
+				realpath(sprintf("%s/../../", dirname(__FILE__))),
+				realpath(sprintf("%s/../../../../bin", dirname(__FILE__)))]);
+			\Inspector\InspectorFunction::purge(["Inspector", "Composer"]);
+
+			[$file] = $parameters;
+
 			try {
-				$result = include($config["file"]);
+				$result = include(realpath($file->getValue()));
 	 		} catch (\Throwable $ex) {
-				$debugger->exception($ex);
+				$this->debugger->exception($ex);
 			} finally {
 				if ($result) {
 					debug_zval_dump($result);

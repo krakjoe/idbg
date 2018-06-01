@@ -1,16 +1,16 @@
 <?php
 namespace Inspector\Debug\Commands {
 
-	class QuitCommand extends \Inspector\Debug\Command {
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;
 
-		public function match(string $line, array &$argv = []) : bool {
-			return preg_match("~^(q|quit)$~", $line);
-		}
+	class QuitCommand extends Command {
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $argv = []) : int {
+		public function __invoke(BreakPoint $bp = null, 
+					 Frame &$frame = null,
+					 Parameter ... $parameters) : int {
 			exit(0);
 		}
 	}

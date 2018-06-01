@@ -1,24 +1,22 @@
 <?php
 namespace Inspector\Debug\Commands {
-	
-	class DeleteCommand extends \Inspector\Debug\Command {
 
-		public function match(string $line, array &$argv = []) : bool {
-			if (preg_match("~^(del|delete)\s([0-9]+)$~", $line, $argv)) {
-				$argv = [
-					"id" => $argv[2]
-				];
-				return true;
-			}
-			return false;
+	use \Inspector\Debug\Command;
+	use \Inspector\Debug\BreakPoint;
+	use \Inspector\InspectorFrame as Frame;
+	use \Inspector\Debug\Parameter;
+
+	class DeleteCommand extends Command {
+
+		public function requiresParameters() : ?array {
+			return [
+				Parameter::Numeric
+			];
 		}
 
-		public function __invoke(\Inspector\Debug\Debugger $debugger, 
-					 \Inspector\Debug\BreakPoint $bp = null, 
-					 \Inspector\InspectorFrame &$frame = null, 
-					 array $config = []) : int {
-			if ($debugger->removeBreakPoint($config["id"])) {
-				printf("removed breakpoint #%d\n", $config["id"]);
+		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
+			if ($this->debugger->removeBreakPoint($parameter->getValue)) {
+				printf("removed breakpoint #%d\n", $parameter->getValue());
 			}
 			return DeleteCommand::CommandInteract;
 		}
