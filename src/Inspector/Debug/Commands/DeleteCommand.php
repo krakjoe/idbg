@@ -15,6 +15,8 @@ namespace Inspector\Debug\Commands {
 		}
 
 		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
+			[$parameter] = $parameters;
+
 			if ($this->debugger->removeBreakPoint($parameter->getValue)) {
 				printf("removed breakpoint #%d\n", $parameter->getValue());
 			}

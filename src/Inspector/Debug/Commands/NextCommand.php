@@ -44,7 +44,7 @@ namespace Inspector\Debug\Commands {
 					if (($bp = $ext->getBreakPoint())) {
 						$bp->enable();
 					} else {
-						$debugger->createBreakPoint($ext, true);
+						$this->debugger->createBreakPoint($ext, true);
 					}
 
 					$next = $inspector->getInstruction(
@@ -68,7 +68,7 @@ namespace Inspector\Debug\Commands {
 					if (($bp = $ext->getBreakPoint())) {
 						$bp->enable();
 					} else {
-						$debugger->createBreakPoint($ext, true);
+						$this->debugger->createBreakPoint($ext, true);
 					}
 				break;
 
@@ -85,7 +85,7 @@ namespace Inspector\Debug\Commands {
 			
 			if ($next) {
 				$idx = ($bp = $next->getBreakPoint()) ? 
-					0 : $debugger->createBreakPoint($next, true);
+					0 : $this->debugger->createBreakPoint($next, true);
 
 				if ($idx > 0) {
 					return NextCommand::CommandReturn;

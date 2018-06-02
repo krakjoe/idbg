@@ -41,7 +41,7 @@ namespace Inspector\Debug\Commands {
 				$this->inspector = new class(
 					$parameter->getValue(0),
 					$parameter,
-					$debugger) extends InspectorClass {
+					$this->debugger) extends InspectorClass {
 
 					use BreakResolver;
 
@@ -55,7 +55,7 @@ namespace Inspector\Debug\Commands {
 				$this->inspector = new class(
 					$parameter->getValue(),
 					$parameter,
-					$debugger) extends InspectorFunction {
+					$this->debugger) extends InspectorFunction {
 
 					use BreakResolver;
 
@@ -69,7 +69,7 @@ namespace Inspector\Debug\Commands {
 				$this->inspector = new class(
 					realpath($parameter->getValue()),
 					$parameter,
-					$debugger) extends InspectorFile {
+					$this->debugger) extends InspectorFile {
 
 					use BreakResolver;
 
