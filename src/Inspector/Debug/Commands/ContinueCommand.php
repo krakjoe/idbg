@@ -8,7 +8,22 @@ namespace Inspector\Debug\Commands {
 
 	class ContinueCommand extends Command {
 
-		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {			
+		public function requiresFrame() : bool {
+			return true;
+		}
+
+		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
+			$function = $frame->getFunction();
+			$opline   = $function->getInstruction(0);
+
+			do {
+				$brk = $opline->getBreakPoint();
+
+				if ($brk && $brk->isTemporary()) {
+					$brk->disable();
+				}
+			} while ($opline = $opline->getNext());
+
 			return ContinueCommand::CommandReturn;
 		}
 	}
