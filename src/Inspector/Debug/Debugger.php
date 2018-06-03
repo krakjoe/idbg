@@ -6,6 +6,8 @@ namespace Inspector\Debug {
 
 	class Debugger {
 
+		const Version = "0.0.1dev";
+
 		public function __construct(string $prompt) {
 			$this->prompt = $prompt;
 
@@ -198,6 +200,25 @@ namespace Inspector\Debug {
 			}
 
 			return $selected;
+		}
+
+		public function welcome() {
+			if (($optimizations = \ini_get("opcache.optimization_level"))) {
+				\sscanf(\ini_get("opcache.optimization_level"), "0x%x", $optimizations);
+			}
+
+			printf("Welcome to idbg v%s:\n" .
+			       "Inspector:\tv%s\n" . 
+			       "Opcache:\t%s%s\n" .
+			       "PHP:\t\tv%s\n",
+				Debugger::Version, \Inspector\Version,
+				\ini_get("opcache.enable_cli") ? "enabled" : "disabled",
+				\ini_get("opcache.enable_cli") ? 
+					($optimizations) ? 
+						\sprintf(", Optimizations: 0x%X", $optimizations) : 
+						", No Optimizations" : 
+					null,
+				\phpversion());
 		}
 
 		private $prompt;
