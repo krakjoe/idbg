@@ -52,6 +52,10 @@ namespace Inspector\Debug\Commands {
 				break;
 
 				case Instruction::ZEND_JMP:
+					$next = $inspector->getInstruction(
+						$opline->getOperand(Operand::OP1)->getNumber());
+				break;
+
 				case Instruction::ZEND_JMPZ:
 				case Instruction::ZEND_JMPNZ:
 				case Instruction::ZEND_JMPZ_EX:
