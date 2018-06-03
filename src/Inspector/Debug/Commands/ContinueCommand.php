@@ -8,7 +8,7 @@ namespace Inspector\Debug\Commands {
 
 	class ContinueCommand extends Command {
 
-		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
+		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {			
 			return ContinueCommand::CommandReturn;
 		}
 	}

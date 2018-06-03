@@ -18,9 +18,27 @@ namespace Inspector\Debug\Commands {
 					$this->getMethod($this->parameter->getValue(1));
 			} else $inspector = $this;
 
-			$opline = $inspector->getEntryInstruction();
+			switch ($this->parameter->getOffsetType()) {
+				case Parameter::OffsetLine:
+					$opline = $inspector->getInstruction(0);
 
-			var_dump($opline);
+					while ($opline->getLine() < $this->parameter->getOffset()) {
+						$opline = $opline->getNext();
+					}
+				break;
+
+				case Parameter::OffsetOpline:
+					$opline = $inspector->getInstruction(
+						$this->parameter->getOffset());
+				break;
+
+				default:
+					$opline = $inspector->getEntryInstruction();
+			}
+
+			if (!$opline) {
+				return;
+			}
 
 			$this->debugger->createBreakPoint($opline, false, "");
 		} 
