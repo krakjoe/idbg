@@ -21,6 +21,7 @@ foreach ([
 	new Inspector\Debug\Commands\DeleteCommand($debugger),
 	new Inspector\Debug\Commands\BreaksCommand($debugger),
 	new Inspector\Debug\Commands\ContinueCommand($debugger),
+	new Inspector\Debug\Commands\FinishCommand($debugger),
 	new Inspector\Debug\Commands\NextCommand($debugger),
 	new Inspector\Debug\Commands\PrintCommand($debugger),
 	new Inspector\Debug\Commands\ListCommand($debugger),
