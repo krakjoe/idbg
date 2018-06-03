@@ -1,6 +1,7 @@
 <?php
 namespace Inspector\Debug {
 
+	use \Inspector\Debug\Parameter;
 	use \Inspector\InspectorFrame as Frame;
 
 	abstract class Command {
@@ -25,6 +26,16 @@ namespace Inspector\Debug {
 			return [
 				strtolower(substr($this->getName(), 0, 2))
 			];
+		}
+
+		public function getHelp() {
+			if (($parameters = $this->requiresParameters())) {
+				$help = [];
+				foreach ($parameters as $parameter) {
+					$help[] = Parameter::explain($parameter);
+				}
+				return implode(", ", $help);
+			}
 		}
 
 		public function requiresParameters() : ?array { return null; }

@@ -67,18 +67,22 @@ namespace Inspector\Debug {
 				"offset" => [],
 			];
 
-			foreach ([
-				Parameter::File => "File",
-				Parameter::Numeric => "Numeric",
-				Parameter::Method => "Method",
-				Parameter::Symbol => "Symbol",
-				Parameter::Raw => "Raw",
-			] as $check => $name) {
-				if ($constant & $check) {
-					$explain["types"][] = $name;
+			if ($constant == Parameter::Raw) {
+				$explain["types"][] = "Raw";
+			} else {
+				foreach ([
+					Parameter::File => "File",
+					Parameter::Numeric => "Numeric",
+					Parameter::Method => "Method",
+					Parameter::Symbol => "Symbol",
+					Parameter::Raw => "Raw",
+				] as $check => $name) {
+					if ($constant & $check) {
+						$explain["types"][] = $name;
+					}
 				}
 			}
-
+			
 			if ($constant &~ Parameter::TypeMask) {
 				foreach([
 					Parameter::OffsetAny   => "Offset (Any)",

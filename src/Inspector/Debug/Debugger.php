@@ -127,6 +127,10 @@ namespace Inspector\Debug {
 		public function addCommand(Command $command) {
 			$this->commands[$command->getName()] = $command;
 		}
+		
+		public function getCommands() : array {
+			return $this->commands;
+		}
 
 		public function listSource(string $file, int $start = 0, int $end = -1, int $highlight = -1) {
 			if (!isset($this->sources[$file])) {
