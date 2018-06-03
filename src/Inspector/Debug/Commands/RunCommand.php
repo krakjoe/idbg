@@ -19,6 +19,7 @@ namespace Inspector\Debug\Commands {
 				realpath(sprintf("%s/../../", dirname(__FILE__))),
 				realpath(sprintf("%s/../../../../bin", dirname(__FILE__)))]);
 			\Inspector\InspectorFunction::purge(["Inspector", "Composer"]);
+			\Inspector\InspectorClass::purge(["Inspector", "Composer"]);
 
 			[$file] = $parameters;
 
