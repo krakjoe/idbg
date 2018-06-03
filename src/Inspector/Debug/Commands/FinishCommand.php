@@ -32,7 +32,7 @@ namespace Inspector\Debug\Commands {
 					->createBreakPoint($opline->getNext(), true, "");
 			}
 
-			return ContinueCommand::CommandReturn;
+			return FinishCommand::CommandReturn;
 		}
 	}
 }
