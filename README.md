@@ -20,11 +20,11 @@ Please do test, at this stage, we ar reliant upon the reports *you* make to impr
 
 Executing `composer require krakjoe/idbg dev-master` in your project will install `vendor/bin/idbg`, executing `vendor/bin/idbg` will present you with:
 
-[![bin/idbg](https://i.imgur.com/LbxBMMk.png](https://github.com/krakjoe/idbg/blob/master/bin/idbg)
+[![bin/idbg](https://i.imgur.com/LbxBMMk.png)
 
 `idbg` is ready to accept commands; For a list of commands, and a little help, type `help` and press enter:
 
-[![help](https://i.imgur.com/UFUsFWQ.png](https://github.com/krakjoe/idbg/blob/master/src/Inspector/Debug/Commands/HelpCommand.php)
+[![help](https://i.imgur.com/UFUsFWQ.png)
 
 You probably want to set Break Points before executing `run file://path/to/my/script.php`, or using `eval` to enter into some code.
 
