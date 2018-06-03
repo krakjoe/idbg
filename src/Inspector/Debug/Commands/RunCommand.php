@@ -21,6 +21,8 @@ namespace Inspector\Debug\Commands {
 			\Inspector\InspectorFunction::purge(["Inspector", "Composer"]);
 			\Inspector\InspectorClass::purge(["Inspector", "Composer"]);
 
+			$this->debugger->purgeSources();
+
 			[$file] = $parameters;
 
 			try {

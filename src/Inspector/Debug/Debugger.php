@@ -132,6 +132,10 @@ namespace Inspector\Debug {
 			return $this->commands;
 		}
 
+		public function purgeSources() {
+			$this->sources = [];
+		}
+
 		public function listSource(string $file, int $start = 0, int $end = -1, int $highlight = -1) {
 			if (!isset($this->sources[$file])) {
 				$this->sources[$file] = file($file);

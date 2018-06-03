@@ -14,7 +14,7 @@ namespace Inspector\Debug\Commands {
 
 		public function __invoke(BreakPoint $bp = null, Frame &$frame = null, Parameter ... $parameters) : int {
 			$stack = $frame->getStack();
-			foreach ($stack as $name => $value) {	
+			foreach ($stack as $name => $value) {
 				$type = gettype($value);
 
 				printf("% -30s\t", $name);
@@ -29,8 +29,8 @@ namespace Inspector\Debug\Commands {
 					break;
 
 					default:
-						if ($type == "string" && strlen($string) > 30) {
-							printf("string(%d)\n", strlen($string));
+						if ($type == "string" && strlen($value) > 30) {
+							printf("string(%d)\n", strlen($value));
 							continue;
 						}
 
