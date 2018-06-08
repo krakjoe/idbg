@@ -171,6 +171,10 @@ namespace Inspector\Debug {
 			if ($end == -1) {
 				$end = $limit;
 			}
+			if ($start < 1) {
+				$end += +$start;
+				$start = 1;
+			}
 
 			for ($line = $start; $line < $end; $line++) {
 				if ($line >= $limit)
