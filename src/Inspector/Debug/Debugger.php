@@ -3,7 +3,7 @@ namespace Inspector\Debug {
 
 	use \Inspector\InspectorFrame as Frame;
 	use \Inspector\InspectorInstruction;
-
+	
 	class Debugger {
 
 		const Version = "0.0.1dev";
@@ -11,6 +11,27 @@ namespace Inspector\Debug {
 		public function __construct(string $prompt) {
 			$this->prompt = $prompt;
 
+			\Inspector\InspectorBreakPoint::onException(function(Frame $frame, \Throwable $exception) {
+				$bp = new ExceptionBreakPoint(
+					$this, 
+					$frame->getInstruction(), 
+					count($this->breaks)+1, false, $exception);
+
+				$function = $frame->getFunction();
+				$opline = $frame->getInstruction();
+
+				printf("[%08x] exception at %s#%d (%s) in %s on line %d\n", 
+					$opline->getAddress(),
+					($name = $function->getName()) ? 
+						$name : "main()",
+					$opline->getOffset(),
+					$opline->getOpcodeName(),
+					$function->getFileName(),		
+					$opline->getLine());
+
+				$this->listOpline($opline);
+				$this->interact($bp, $frame);
+			});
 		}
 
 		private function prompt() : string {
