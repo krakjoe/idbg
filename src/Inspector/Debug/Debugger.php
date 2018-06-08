@@ -95,27 +95,23 @@ namespace Inspector\Debug {
 		}
 
 		public function interact(BreakPoint $bp = null, Frame &$frame = null) {
-			try {
-				$line = $this->prompt();
+			$line = $this->prompt();
 
-				if (!$line) {
-					return;
-				}
+			if (!$line) {
+				return;
+			}
 
-				$parameters = [];
+			$parameters = [];
 
-				if ($command = $this->findCommand($line, $parameters)) {
-					if ($command->requiresFrame() && !$frame) {
-						printf("%s requires a frame\n", 
-							$command->getName());
-					} else {
-						if ($command($bp, $frame, ... $parameters) == Command::CommandReturn) {
-							return;
-						}
+			if ($command = $this->findCommand($line, $parameters)) {
+				if ($command->requiresFrame() && !$frame) {
+					printf("%s requires a frame\n", 
+						$command->getName());
+				} else {
+					if ($command($bp, $frame, ... $parameters) == Command::CommandReturn) {
+						return;
 					}
 				}
-			} catch (\Throwable $ex) {
-				$this->exception($ex);
 			}
 
 			$this->interact($bp, $frame);

@@ -30,9 +30,7 @@ namespace Inspector\Debug\Commands {
 					"return %s;",
 					$parameter->getInput()
 				));
-	 		} catch (\Throwable $ex) {
-				$this->debugger->exception($ex);
-			} finally {
+	 		} finally {
 				if ($stack) {
 					foreach ($stack as $k => $v) {
 						unset($v);

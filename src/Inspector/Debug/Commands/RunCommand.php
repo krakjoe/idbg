@@ -27,9 +27,7 @@ namespace Inspector\Debug\Commands {
 
 			try {
 				$result = include(realpath($file->getValue()));
-	 		} catch (\Throwable $ex) {
-				$this->debugger->exception($ex);
-			} finally {
+	 		} finally {
 				if ($result) {
 					debug_zval_dump($result);
 				}
