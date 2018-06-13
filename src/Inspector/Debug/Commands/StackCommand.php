@@ -5,6 +5,7 @@ namespace Inspector\Debug\Commands {
 	use \Inspector\Debug\BreakPoint;
 	use \Inspector\InspectorFrame as Frame;
 	use \Inspector\Debug\Parameter;
+	use function \Inspector\addressof;
 
 	class StackCommand extends Command {
 
@@ -17,7 +18,8 @@ namespace Inspector\Debug\Commands {
 			foreach ($stack as $name => $value) {
 				$type = gettype($value);
 
-				printf("% -30s\t", $name);
+				printf("% -30s\t0x%x\t", $name, addressof($value));
+
 				switch ($type) {
 					case "object":
 					case "array":
