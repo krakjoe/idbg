@@ -18,7 +18,8 @@ namespace Inspector\Debug {
 					count($this->breaks)+1, false, $exception);
 
 				$function = $frame->getFunction();
-				$scope    = $function->getDeclaringClass();
+				$scope    = $function instanceof \Inspector\InspectorMethod ?
+						 $function->getDeclaringClass() : null;
 				$opline = $frame->getInstruction();
 
 				printf("[%08x] exception at %s#%d (%s) in %s on line %d\n", 
