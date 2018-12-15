@@ -18,12 +18,15 @@ namespace Inspector\Debug {
 					count($this->breaks)+1, false, $exception);
 
 				$function = $frame->getFunction();
+				$scope    = $function->getDeclaringClass();
 				$opline = $frame->getInstruction();
 
 				printf("[%08x] exception at %s#%d (%s) in %s on line %d\n", 
 					$opline->getAddress(),
 					($name = $function->getName()) ? 
-						$name : "main()",
+						$scope ?
+							sprintf("%s::%s", $scope->getName(), $name) :
+								$name : "main()",
 					$opline->getOffset(),
 					$opline->getOpcodeName(),
 					$function->getFileName(),		
